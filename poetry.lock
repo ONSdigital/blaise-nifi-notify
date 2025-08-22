@@ -62,8 +62,8 @@ requests = "^2.32.5"
 [package.source]
 type = "git"
 url = "https://github.com/ONSdigital/blaise-data-delivery-status-client.git"
-reference = "py313"
-resolved_reference = "d9dee32ae4294bff2bf0591408a14b9f9182e1e2"
+reference = "v1.0.1"
+resolved_reference = "3d0c8d345f8e5196deb0f5c5da800c5b9d399735"
 
 [[package]]
 name = "cachetools"
@@ -1189,4 +1189,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.13"
-content-hash = "c852b9327c2ac821852e434b11f48d3392d38c6ec345603441f7814581ce7048"
+content-hash = "d5bbd947a2fa952bfe25170cf40db1b9c98e4d2a31d3a8d968fd8762e7878b80"
