@@ -80,6 +80,7 @@ def test_file_is_lms(file, survey_tla, expected):
     file.name = f"dd_{survey_tla}2101a.zip:my-bucket-name"
     assert file.is_lms() is expected
 
+
 @pytest.mark.parametrize(
     "survey_tla, expected",
     [
