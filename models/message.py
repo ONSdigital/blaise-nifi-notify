@@ -48,7 +48,7 @@ class File:
 
     def is_lms(self):
         return self.survey_tla().startswith("LM")
-    
+
     def is_frs(self):
         return self.survey_tla().startswith("FRS")
 
@@ -119,7 +119,7 @@ class Message:
         self.iterationL2 = environment
         self.iterationL3 = file.instrument_name()
         return self
-    
+
     def data_delivery_frs(self, config):
         file = self.first_file()
         survey_tla = file.survey_tla()
