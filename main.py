@@ -3,7 +3,7 @@ from models.message import create_message, send_pub_sub_message
 from utils import log_event, update_data_delivery_state
 
 
-def publishMsg(event, _context):
+def nifi_notify(event, _context):
     config = Config.from_env()
     config.log()
     log_event(event)
