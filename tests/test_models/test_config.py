@@ -4,7 +4,7 @@ from unittest import mock
 import blaise_dds
 import pytest
 
-from main import publishMsg
+from main import nifi_notify
 from models.config import Config
 
 
@@ -50,7 +50,7 @@ def test_config_from_env():
 )
 def test_project_id_not_set(_mock_update_state, dd_event, capsys, instrument):
     dd_event = dd_event(instrument)
-    publishMsg(dd_event, None)
+    nifi_notify(dd_event, None)
     captured = capsys.readouterr()
     assert captured.out == (
         "Configuration: Project ID: None\n"
