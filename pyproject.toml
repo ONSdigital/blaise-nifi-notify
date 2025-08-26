@@ -6,7 +6,7 @@ pythonpath = "."
 
 [tool.poetry.dependencies]
 python = "^3.13"
-blaise-dds = {git = "https://github.com/ONSdigital/blaise-data-delivery-status-client.git", tag = "v1.0.1"}
+blaise-dds = {git = "https://github.com/ONSdigital/blaise-data-delivery-status-python-client.git", tag = "v1.0.1"}
 google-cloud-pubsub = "2.14.0"
 googleapis-common-protos = "^1.70.0"
 grpc-google-iam-v1 = "^0.14.2"
