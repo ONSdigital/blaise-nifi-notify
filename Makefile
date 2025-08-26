@@ -16,7 +16,8 @@ format:
 lint:
 	@poetry run black --check .
 	@poetry run isort --check .
-	@poetry run flake8 --max-line-length=88 . --exclude=tests
+	@poetry run flake8 --max-line-length=120 --exclude=tests .
+	@poetry run mypy .
 
 .PHONY: test
 ## Run unit tests
