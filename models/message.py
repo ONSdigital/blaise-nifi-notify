@@ -167,19 +167,23 @@ def create_message(event, config):
             f"File extension '{file.extension()}' is invalid, supported extensions: {SUPPORTED_FILE_EXTENSIONS}"  # noqa:E501
         )
 
-    if file.type() == "mi":
+    file_type = file.type()
+    if file_type == "mi":
         return msg.management_information(config)
-    if file.type() == "dd" and file.is_lms():
-        return msg.data_delivery_lms(config)
-    if file.type() == "dd" and file.is_frs():
-        return msg.data_delivery_frs(config)
-    if file.type() == "dd" and file.is_scs():
-        return msg.data_delivery_scs(config)
-    if file.type() == "dd":
-        return msg.data_delivery_default(config)
+    if file_type == "dd":
+        data_delivery_handlers = (
+            (file.is_lms(), msg.data_delivery_lms),
+            (file.is_frs(), msg.data_delivery_frs),
+            (file.is_scs(), msg.data_delivery_scs),
+        )
+        handler = next(
+            (handler for matches, handler in data_delivery_handlers if matches),
+            msg.data_delivery_default,
+        )
+        return handler(config)
 
     raise InvalidFileType(
-        f"File type '{file.type()}' is invalid, supported extensions: {SUPPORTED_FILE_TYPES}"  # noqa:E501
+        f"File type '{file_type}' is invalid, supported extensions: {SUPPORTED_FILE_TYPES}"  # noqa:E501
     )
 
 
