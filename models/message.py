@@ -52,6 +52,9 @@ class File:
     def is_frs(self):
         return self.survey_tla().startswith("FRS")
 
+    def is_yps(self):
+        return self.survey_tla().startswith("YPS")
+
     @classmethod
     def from_event(cls, event):
         return cls(
@@ -134,6 +137,20 @@ class Message:
         self.iterationL4 = file.instrument_name()
         return self
 
+    def data_delivery_yps(self, config):
+        file = self.first_file()
+        survey_tla = file.survey_tla()
+        environment = config.env
+        self.description = (
+            f"Data Delivery files for {survey_tla} uploaded to GCP bucket from Blaise5"
+        )
+        self.dataset = "blaise_dde_yps"
+        self.iterationL1 = "Crime Statistics Data"
+        self.iterationL2 = f"bl5-{environment}"
+        self.iterationL3 = "YPS"
+        self.iterationL4 = file.instrument_name()
+        return self
+
 
 def create_message(event, config):
     file = File.from_event(event)
@@ -152,16 +169,23 @@ def create_message(event, config):
 
     if file.type() == "mi":
         return msg.management_information(config)
-    if file.type() == "dd" and file.is_lms():
-        return msg.data_delivery_lms(config)
-    if file.type() == "dd" and file.is_frs():
-        return msg.data_delivery_frs(config)
+
     if file.type() == "dd":
-        return msg.data_delivery_default(config)
+        return create_data_delivery_message(msg, file, config)
 
     raise InvalidFileType(
         f"File type '{file.type()}' is invalid, supported extensions: {SUPPORTED_FILE_TYPES}"  # noqa:E501
     )
+
+
+def create_data_delivery_message(msg, file, config):
+    if file.is_lms():
+        return msg.data_delivery_lms(config)
+    if file.is_frs():
+        return msg.data_delivery_frs(config)
+    if file.is_yps():
+        return msg.data_delivery_yps(config)
+    return msg.data_delivery_default(config)
 
 
 def send_pub_sub_message(config, message):
