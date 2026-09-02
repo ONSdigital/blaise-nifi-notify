@@ -52,6 +52,9 @@ class File:
     def is_frs(self):
         return self.survey_tla().startswith("FRS")
 
+    def is_scs(self):
+        return self.survey_tla().startswith("SCS")
+
     @classmethod
     def from_event(cls, event):
         return cls(
@@ -134,6 +137,20 @@ class Message:
         self.iterationL4 = file.instrument_name()
         return self
 
+    def data_delivery_scs(self, config):
+        file = self.first_file()
+        survey_tla = file.survey_tla()
+        environment = config.env
+        self.description = (
+            f"Data Delivery files for {survey_tla} uploaded to GCP bucket from Blaise5"
+        )
+        self.dataset = "blaise_dde_scs"
+        self.iterationL1 = "Crime Statistics Data"
+        self.iterationL2 = f"BL5-{environment}"
+        self.iterationL3 = "SCS"
+        self.iterationL4 = file.instrument_name()
+        return self
+
 
 def create_message(event, config):
     file = File.from_event(event)
@@ -150,17 +167,23 @@ def create_message(event, config):
             f"File extension '{file.extension()}' is invalid, supported extensions: {SUPPORTED_FILE_EXTENSIONS}"  # noqa:E501
         )
 
-    if file.type() == "mi":
+    file_type = file.type()
+    if file_type == "mi":
         return msg.management_information(config)
-    if file.type() == "dd" and file.is_lms():
-        return msg.data_delivery_lms(config)
-    if file.type() == "dd" and file.is_frs():
-        return msg.data_delivery_frs(config)
-    if file.type() == "dd":
-        return msg.data_delivery_default(config)
+    if file_type == "dd":
+        data_delivery_handlers = (
+            (file.is_lms(), msg.data_delivery_lms),
+            (file.is_frs(), msg.data_delivery_frs),
+            (file.is_scs(), msg.data_delivery_scs),
+        )
+        handler = next(
+            (handler for matches, handler in data_delivery_handlers if matches),
+            msg.data_delivery_default,
+        )
+        return handler(config)
 
     raise InvalidFileType(
-        f"File type '{file.type()}' is invalid, supported extensions: {SUPPORTED_FILE_TYPES}"  # noqa:E501
+        f"File type '{file_type}' is invalid, supported extensions: {SUPPORTED_FILE_TYPES}"  # noqa:E501
     )
 
 
