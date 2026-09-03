@@ -145,10 +145,9 @@ class Message:
             f"Data Delivery files for {survey_tla} uploaded to GCP bucket from Blaise5"
         )
         self.dataset = "blaise_dde_scs"
-        self.iterationL1 = "Crime Statistics Data"
-        self.iterationL2 = f"BL5-{environment}"
-        self.iterationL3 = "SCS"
-        self.iterationL4 = file.instrument_name()
+        self.iterationL1 = f"BL5-{environment}"
+        self.iterationL2 = "SCS"
+        self.iterationL3 = file.instrument_name()
         return self
 
 

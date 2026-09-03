@@ -180,10 +180,10 @@ def test_create_message_for_data_delivery_scs(dd_event, config):
     )
 
     assert actual_message.dataset == "blaise_dde_scs"
-    assert actual_message.iterationL1 == "Crime Statistics Data"
-    assert actual_message.iterationL2 == "BL5-test"
-    assert actual_message.iterationL3 == "SCS"
-    assert actual_message.iterationL4 == "SCS2411A"
+    assert actual_message.iterationL1 == "BL5-test"
+    assert actual_message.iterationL2 == "SCS"
+    assert actual_message.iterationL3 == "SCS2411A"
+    assert actual_message.iterationL4 == ""
 
 
 @pytest.mark.parametrize(
