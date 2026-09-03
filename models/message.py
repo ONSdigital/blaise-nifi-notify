@@ -148,7 +148,6 @@ class Message:
         self.iterationL1 = f"BL5-{environment}"
         self.iterationL2 = "SCS"
         self.iterationL3 = file.instrument_name()
-        self.iterationL4 = ""
         return self
 
 
