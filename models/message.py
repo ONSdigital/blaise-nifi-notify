@@ -55,6 +55,9 @@ class File:
     def is_scs(self):
         return self.survey_tla().startswith("SCS")
 
+    def is_yps(self):
+        return self.survey_tla().startswith("YPS")
+
     @classmethod
     def from_event(cls, event):
         return cls(
@@ -145,8 +148,21 @@ class Message:
             f"Data Delivery files for {survey_tla} uploaded to GCP bucket from Blaise5"
         )
         self.dataset = "blaise_dde_scs"
-        self.iterationL1 = f"BL5-{environment}"
+        self.iterationL1 = f"bl5-{environment}"
         self.iterationL2 = "SCS"
+        self.iterationL3 = file.instrument_name()
+        return self
+
+    def data_delivery_yps(self, config):
+        file = self.first_file()
+        survey_tla = file.survey_tla()
+        environment = config.env
+        self.description = (
+            f"Data Delivery files for {survey_tla} uploaded to GCP bucket from Blaise5"
+        )
+        self.dataset = "blaise_dde_yps"
+        self.iterationL1 = f"bl5-{environment}"
+        self.iterationL2 = "YPS"
         self.iterationL3 = file.instrument_name()
         return self
 
@@ -174,6 +190,7 @@ def create_message(event, config):
             (file.is_lms(), msg.data_delivery_lms),
             (file.is_frs(), msg.data_delivery_frs),
             (file.is_scs(), msg.data_delivery_scs),
+            (file.is_yps(), msg.data_delivery_yps),
         )
         handler = next(
             (handler for matches, handler in data_delivery_handlers if matches),

@@ -39,6 +39,7 @@ def test_file_type(file, file_name, file_type):
         ("dd_lmb21021_bk2.zip", "LMB"),
         ("dd_frs2411a.zip", "FRS"),
         ("dd_scs2411a.zip", "SCS"),
+        ("dd_yps2611a.zip", "YPS"),
     ],
 )
 def test_file_survey_tla(file, file_name, expected):
@@ -55,6 +56,7 @@ def test_file_survey_tla(file, file_name, expected):
         ("dd_lmc2102_bk1.zip", "LMC2102_BK1"),
         ("dd_frs2411a.zip", "FRS2411A"),
         ("dd_scs2411a.zip", "SCS2411A"),
+        ("dd_yps2611a.zip", "YPS2611A"),
     ],
 )
 def test_file_instrument_name(file, file_name, expected):
@@ -77,6 +79,7 @@ def test_file_instrument_name(file, file_name, expected):
         ("LBS", False),
         ("FRS", False),
         ("SCS", False),
+        ("YPS", False),
     ],
 )
 def test_file_is_lms(file, survey_tla, expected):
@@ -99,6 +102,7 @@ def test_file_is_lms(file, survey_tla, expected):
         ("LBS", False),
         ("FRS", True),
         ("SCS", False),
+        ("YPS", False),
     ],
 )
 def test_file_is_frs(file, survey_tla, expected):
@@ -121,6 +125,7 @@ def test_file_from_event(dd_event):
         ("lms2102_bk1", "LMS"),
         ("frs2102a", "FRS"),
         ("scs2102a", "SCS"),
+        ("yps2102a", "YPS"),
     ],
 )
 def test_create_message_for_management_information(
@@ -180,9 +185,25 @@ def test_create_message_for_data_delivery_scs(dd_event, config):
     )
 
     assert actual_message.dataset == "blaise_dde_scs"
-    assert actual_message.iterationL1 == "BL5-test"
+    assert actual_message.iterationL1 == "bl5-test"
     assert actual_message.iterationL2 == "SCS"
     assert actual_message.iterationL3 == "SCS2411A"
+    assert actual_message.iterationL4 == ""
+
+
+def test_create_message_for_data_delivery_yps(dd_event, config):
+    dd_event = dd_event("yps2611a")
+    actual_message = create_message(dd_event, config)
+
+    assert (
+        actual_message.description
+        == "Data Delivery files for YPS uploaded to GCP bucket from Blaise5"
+    )
+
+    assert actual_message.dataset == "blaise_dde_yps"
+    assert actual_message.iterationL1 == "bl5-test"
+    assert actual_message.iterationL2 == "YPS"
+    assert actual_message.iterationL3 == "YPS2611A"
     assert actual_message.iterationL4 == ""
 
 
