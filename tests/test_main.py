@@ -5,6 +5,7 @@ from unittest import mock
 import blaise_dds
 import pytest
 from google.cloud.pubsub_v1 import PublisherClient
+from pytest_lazy_fixtures import lf
 
 from main import nifi_notify
 
@@ -23,9 +24,9 @@ from main import nifi_notify
 @pytest.mark.parametrize(
     "instrument, expected_message",
     [
-        ("OPN2102R", pytest.lazy_fixture("expected_pubsub_message_dd_opn")),
-        ("LMS2102R", pytest.lazy_fixture("expected_pubsub_message_dd_lms")),
-        ("LMC2102R", pytest.lazy_fixture("expected_pubsub_message_dd_lmc")),
+        ("OPN2102R", lf("expected_pubsub_message_dd_opn")),
+        ("LMS2102R", lf("expected_pubsub_message_dd_lms")),
+        ("LMC2102R", lf("expected_pubsub_message_dd_lmc")),
     ],
 )
 def test_nifi_notify_for_data_delivery(
