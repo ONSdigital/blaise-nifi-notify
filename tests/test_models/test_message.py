@@ -174,6 +174,7 @@ def test_create_message_for_data_delivery_frs(dd_event, config):
     assert actual_message.iterationL3 == "bl5-test"
     assert actual_message.iterationL4 == "FRS2411A"
 
+
 def test_create_message_for_data_delivery_scs(dd_event, config):
     dd_event = dd_event("scs2411a")
     actual_message = create_message(dd_event, config)
@@ -188,6 +189,7 @@ def test_create_message_for_data_delivery_scs(dd_event, config):
     assert actual_message.iterationL2 == "SCS"
     assert actual_message.iterationL3 == "SCS2411A"
     assert actual_message.iterationL4 == ""
+
 
 def test_create_message_for_data_delivery_yps(dd_event, config):
     dd_event = dd_event("yps2611a")
